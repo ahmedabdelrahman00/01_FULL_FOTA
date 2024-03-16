@@ -22,7 +22,7 @@
 
 /* Debug Info */
 #define BL_DEBUG_UART_PC                     &huart1
-#define BL_DEBUG_UART_HOST                   &huart2
+#define BL_DEBUG_UART_HOST                   &huart3
 
 #define DEBUG_INFO_DISABLE          				 0
 #define DEBUG_INFO_ENABLE            				 1

@@ -8,11 +8,11 @@
 ../Core/Src/bootloader.c:267:13:Bootloader_Get_Version	32	static
 ../Core/Src/bootloader.c:303:13:Bootloader_Get_Help	24	static
 ../Core/Src/bootloader.c:335:13:Bootloader_Get_Chip_Identification_Number	32	static
-../Core/Src/bootloader.c:369:13:Bootloader_Jump_To_UserApp	40	static,ignoring_inline_asm
-../Core/Src/bootloader.c:411:6:Bootloader_Jump_To_Application	24	static,ignoring_inline_asm
-../Core/Src/bootloader.c:442:16:Host_Address_Verification	24	static
-../Core/Src/bootloader.c:462:13:Bootloader_Jump_To_Address	40	static
-../Core/Src/bootloader.c:582:11:Perform_Flash_Erase	48	static
+../Core/Src/bootloader.c:370:13:Bootloader_Jump_To_UserApp	40	static,ignoring_inline_asm
+../Core/Src/bootloader.c:413:6:Bootloader_Jump_To_Application	24	static,ignoring_inline_asm
+../Core/Src/bootloader.c:444:16:Host_Address_Verification	24	static
+../Core/Src/bootloader.c:464:13:Bootloader_Jump_To_Address	40	static
+../Core/Src/bootloader.c:585:9:Perform_Flash_Erase	48	static
 ../Core/Src/bootloader.c:624:13:Bootloader_Erase_Flash	32	static
 ../Core/Src/bootloader.c:665:9:Flash_Memory_Write_Payload	48	static
 ../Core/Src/bootloader.c:709:13:Bootloader_Memory_Write	32	static

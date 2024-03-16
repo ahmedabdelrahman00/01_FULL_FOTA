@@ -85,13 +85,13 @@ BL_Status BL_UART_Fetch_Host_Command (void){
 	/* Clear BL_Host_Buffer */
 	memset(BL_Host_Buffer, 0, BL_HOST_BUFFER_RX_LENGTH);
 	/* Read the length of the command packet received from the HOST */
-	HAL_Status = HAL_UART_Receive(&huart3, BL_Host_Buffer, 1, HAL_MAX_DELAY);
+	HAL_Status = HAL_UART_Receive(BL_DEBUG_UART_HOST, BL_Host_Buffer, 1, HAL_MAX_DELAY);
 	if (HAL_Status != HAL_OK){
 		  Status = BL_NOT_OK;
 	}
 	else{
 		Data_length = BL_Host_Buffer[0];
-		HAL_Status = HAL_UART_Receive(&huart3, &BL_Host_Buffer[1], Data_length, HAL_MAX_DELAY);
+		HAL_Status = HAL_UART_Receive(BL_DEBUG_UART_HOST, &BL_Host_Buffer[1], Data_length, HAL_MAX_DELAY);
 		if (HAL_Status != HAL_OK){
 		  Status = BL_NOT_OK;
 	   }
@@ -124,7 +124,7 @@ BL_Status BL_UART_Fetch_Host_Command (void){
 					break;
 				case CBL_FLASH_ERASE_CMD:
 					BL_Print_Message("Erases some pages in flash memory \r\n");
-				    Bootloader_Erase_Flash(BL_Host_Buffer);
+					Bootloader_Erase_Flash(BL_Host_Buffer);
 					Status = BL_OK;
 					break;
 				case CBL_MEM_WRITE_CMD:
@@ -179,7 +179,7 @@ BL_Status BL_UART_Fetch_Host_Command (void){
 **************************************************************************************/
 
  static inline void Bootloader_Send_Data_To_Host (uint8_t *Host_Buffer, uint32_t Data_Len){
-	HAL_UART_Transmit(&huart3, Host_Buffer, Data_Len, HAL_MAX_DELAY);
+	HAL_UART_Transmit(BL_DEBUG_UART_HOST, Host_Buffer, Data_Len, HAL_MAX_DELAY);
 }
 
 /*************************************************************************************
@@ -366,24 +366,25 @@ static void Bootloader_Get_Chip_Identification_Number	(uint8_t *Host_Buffer){
   * @param  no params.
   * @retval no return.
 **************************************************************************************/
+
 static void Bootloader_Jump_To_UserApp (uint8_t *Host_Buffer){
 	uint16_t Host_CMD_Packet_Len = 0;
   uint32_t Host_CRC32 = 0;
 #if (BL_DEBUG_ENABLE == DEBUG_INFO_ENABLE)
 	BL_Print_Message("Read the bootloader version from the MCU \r\n");
-#endif	
+#endif
 	/* CRC Verification */
 	Host_CMD_Packet_Len = Host_Buffer[0] + 1;
-	Host_CRC32 = *((uint32_t* )((Host_Buffer + Host_CMD_Packet_Len) - CRC_TYPE_SIZE_BYTE));	
-	if (CRC_VERIFICATION_PASSED == 
+	Host_CRC32 = *((uint32_t* )((Host_Buffer + Host_CMD_Packet_Len) - CRC_TYPE_SIZE_BYTE));
+	if (CRC_VERIFICATION_PASSED ==
 		                     Calculate_CRC32 (Host_Buffer, Host_CMD_Packet_Len -  CRC_TYPE_SIZE_BYTE, Host_CRC32)){
 #if (BL_DEBUG_ENABLE == DEBUG_INFO_ENABLE)
 		BL_Print_Message("CRC Verification Passed \r\n");
-#endif										 
+#endif
 
 		Bootloader_Send_ACK(1);
 
-		Bootloader_Send_Data_To_Host((uint8_t*)CRC_VERIFICATION_PASSED, 1);										 
+		Bootloader_Send_Data_To_Host((uint8_t*)CRC_VERIFICATION_PASSED, 1);
 		/* ------> Jump to user Application <------ */
     // Read the MSP (Main Stack Pointer) value from the user application's vector table
 		Bootloader_Jump_To_Application();
@@ -397,17 +398,18 @@ static void Bootloader_Jump_To_UserApp (uint8_t *Host_Buffer){
 	  // Deinitialize the RCC (Reset and Clock Control) peripheral (Block any External Interrupts)
 	  HAL_RCC_DeInit();
 	  // Jump to the reset handler address in the user application
-	  ResetHandler_Address();													 											 											 
+	  ResetHandler_Address();
 	}
 	else{
 #if (BL_DEBUG_ENABLE == DEBUG_INFO_ENABLE)
 	  BL_Print_Message("CRC Verification Failed \r\n");
 #endif
 	  Bootloader_Send_NACK();
-	}	
+	}
 
 
 }
+
 void Bootloader_Jump_To_Application()
   {
 
@@ -577,49 +579,47 @@ static void Bootloader_Jump_To_Address (uint8_t *Host_Buffer){
 //	}
 //	return 	Validity_Status;
 //}
-//
+
 #define INVALID_SECTOR            0x12
-  uint8_t Perform_Flash_Erase(uint8_t initial_sector_number, uint8_t number_of_sector)
-  {
-  	//we have totally 12 sectors in one bank .. sector[0 to 11]
-  	//number_of_sector has to be in the range of 0 to 11
-  	// if sector_number = 0xff , that means mass erase !
 
-  	FLASH_EraseInitTypeDef flashErase_handle;
-  	uint32_t sectorError = 0;
-  	uint8_t erase_status = 0x01;
+uint8_t Perform_Flash_Erase(uint8_t initial_sector_number, uint8_t number_of_sector) {
+    // we have totally 8 sectors in one bank (sector 0 to 7)
+    // number_of_sector has to be in the range of 0 to 7
+    // if sector_number = 0xff, that means mass erase!
 
-  	if (number_of_sector > 23)
-  		return (uint8_t) INVALID_SECTOR;
+    FLASH_EraseInitTypeDef flashErase_handle;
+    uint32_t sectorError = 0;
+    uint8_t erase_status = 0x01;
 
-  	if ((initial_sector_number == 0xFFFFFFFF) || (number_of_sector <= 23)) {
-  		if (number_of_sector == (uint32_t) 0xFFFFFFFF) {
-  			flashErase_handle.TypeErase = FLASH_TYPEERASE_MASSERASE;
-  			flashErase_handle.Banks = FLASH_BANK_1;
-  		} else {
-  			/*Here we are just calculating how many sectors needs to erased */
-  			uint32_t remanining_sector = 24 - number_of_sector;
-  			if (number_of_sector > remanining_sector) {
-  				number_of_sector = remanining_sector;
-  			}
-  			flashErase_handle.TypeErase = FLASH_TYPEERASE_SECTORS;
-  			flashErase_handle.Sector = initial_sector_number; // this is the initial sector
-  			flashErase_handle.NbSectors = number_of_sector;
-  		}
+    if (number_of_sector > 7)
+        return INVALID_SECTOR;
 
-  		/*Get access to touch the flash registers */
-  		HAL_FLASH_Unlock();
-  		flashErase_handle.VoltageRange = FLASH_VOLTAGE_RANGE_3; // our MCU will work on this voltage range
-  		erase_status = (uint8_t) HAL_FLASHEx_Erase(&flashErase_handle,
-  				&sectorError);
-  		HAL_FLASH_Lock();
+    if ((initial_sector_number == 0xFF) || (number_of_sector <= 7)) {
+        if (number_of_sector == 0xFF) {
+            flashErase_handle.TypeErase = FLASH_TYPEERASE_MASSERASE;
+            flashErase_handle.Banks = FLASH_BANK_1; // Assuming single bank erase
+        } else {
+            // Here we are just calculating how many sectors need to be erased
+            uint32_t remaining_sector = 8 - number_of_sector;
+            if (number_of_sector > remaining_sector) {
+                number_of_sector = remaining_sector;
+            }
+            flashErase_handle.TypeErase = FLASH_TYPEERASE_SECTORS;
+            flashErase_handle.Sector = initial_sector_number; // this is the initial sector
+            flashErase_handle.NbSectors = number_of_sector;
+        }
 
-  		return (uint8_t) erase_status;
-  	}
+        // Get access to touch the flash registers
+        HAL_FLASH_Unlock();
+        flashErase_handle.VoltageRange = FLASH_VOLTAGE_RANGE_3; // your MCU will work on this voltage range
+        erase_status = HAL_FLASHEx_Erase(&flashErase_handle, &sectorError);
+        HAL_FLASH_Lock();
 
-  	return (uint8_t) INVALID_SECTOR;
-  }
+        return erase_status;
+    }
 
+    return INVALID_SECTOR;
+}
 
 static void Bootloader_Erase_Flash	(uint8_t *Host_Buffer){
    /* Local Definations Scope */
@@ -632,25 +632,25 @@ static void Bootloader_Erase_Flash	(uint8_t *Host_Buffer){
 	/* CRC Verification */
 	Host_CMD_Packet_Len = Host_Buffer[0] + 1;
 	Host_CRC32 = *((uint32_t* )((Host_Buffer + Host_CMD_Packet_Len) - CRC_TYPE_SIZE_BYTE));
-	if (CRC_VERIFICATION_PASSED ==Calculate_CRC32(Host_Buffer, Host_CMD_Packet_Len -  CRC_TYPE_SIZE_BYTE, Host_CRC32)){
+	if (CRC_VERIFICATION_PASSED == 
+		                     Calculate_CRC32(Host_Buffer, Host_CMD_Packet_Len -  CRC_TYPE_SIZE_BYTE, Host_CRC32)){
 #if (BL_DEBUG_ENABLE == DEBUG_INFO_ENABLE)
 		BL_Print_Message("CRC Verification Passed \r\n");
 #endif
-		Perform_Flash_Erase(2,6);
 		Bootloader_Send_ACK(1);
 		Erase_Status = Perform_Flash_Erase(Host_Buffer[2], Host_Buffer[3]);
 		Bootloader_Send_Data_To_Host((uint8_t *)&Erase_Status, 1);
 /* Report address verification successed */
 #if (BL_DEBUG_ENABLE == DEBUG_INFO_ENABLE)
 			BL_Print_Message("Erase Status: %d \r\n", Erase_Status);
-#endif
+#endif					
   }
 	else{
 #if (BL_DEBUG_ENABLE == DEBUG_INFO_ENABLE)
 	BL_Print_Message("CRC Verification Failed \r\n");
 #endif
 	Bootloader_Send_NACK();
-	}
+	}	
 }
 
 /*************************************************************************************
@@ -817,3 +817,4 @@ static void    Bootloader_Enable_RW_Protection							(uint8_t *Host_Buffer){}
 static void    Bootloader_Memory_Read										  	(uint8_t *Host_Buffer){}
 static void    Bootloader_Get_Sector_Protection_Status			(uint8_t *Host_Buffer){}
 static void    Bootloader_Read_OTP													(uint8_t *Host_Buffer){}
+	

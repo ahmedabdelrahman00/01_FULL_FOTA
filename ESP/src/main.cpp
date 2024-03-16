@@ -41,7 +41,7 @@ void loop() {
                 delay(4000);
                 /* Send Erase Command */
                 debugln("Send Erase Command");
-                BL_UART_Send_Erase_Command(30, 30);
+                BL_UART_Send_Erase_Command(2, 6);
                 writeState = true;
             }
          }
