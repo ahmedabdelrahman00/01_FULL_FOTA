@@ -107,10 +107,10 @@ uint8_t BL_UART_Send_Write_Command(uint32_t memoryAddress);
  * This function sends a command to the bootloader to initiate a jump to the application.
  */
 void BL_UART_Send_AppJump_Command(void);
-S
+
 /**
  * @brief Send a bootloader jump command to the host.
- *S
+ *
  * This function sends a command to the host to initiate a jump to the bootloader.
  *
  * @return uint8_t Status indicating success (1) or failure (0).

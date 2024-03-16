@@ -45,7 +45,6 @@ void loop() {
                 writeState = true;
             }
          }
-         //ce
          if (writeState){
             writeStatus = BL_UART_Send_Write_Command(APP1_BASE_ADDRESS);
             if (SUCCESS == writeStatus){

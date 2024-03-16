@@ -17,7 +17,6 @@
 
 //Define the Firebase storage bucket ID e.g bucket-name.appspot.com 
 #define STORAGE_BUCKET_ID     "update-f19b4.appspot.com"
-
 #define BAUD_RATE              9600
 #define RXD2                   16
 #define TXD2                   17
