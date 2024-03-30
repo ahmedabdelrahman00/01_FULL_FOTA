@@ -1,0 +1,176 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html {
+    font-size: 62.5%;
+  }
+  
+  body {
+    font-family: "Rubik", sans-serif;
+    line-height: 1;
+    font-weight: 400;
+    color: #555;
+  }
+  
+  .container {
+    max-width: 120rem;
+    margin: 0 auto;
+    padding: 5rem 5rem;
+  }
+  
+  .grid--2--col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    /* justify-content: center; */
+    column-gap: 10rem;
+    row-gap: 9.6rem;
+  }
+  
+  
+  .main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+  
+    /* Because we want header to be sticky later */
+    height: 10rem;
+    padding: 0 10rem;
+  }
+  
+  .main-nav-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 3.2rem;
+  }
+  
+  .main-nav-link:link,
+  .main-nav-link:visited {
+    display: inline-block;
+    text-decoration: none;
+    color: #ddd;
+    font-weight: 500;
+    font-size: 1.8rem;
+    transition: all 0.3s;
+  }
+  
+  .main-nav-link:hover,
+  .main-nav-link:active {
+    color: #888;
+  }
+  
+  
+  
+  .section-hero {
+    padding: 4.8rem 0 9.6rem 0;
+  }
+  
+  .hero-main-style {
+    max-width: 130rem;
+    margin: 0 auto;
+    padding: 0 3.2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 10rem;
+  }
+  
+  .hero-h1 {
+    font-size: 5.2rem;
+    font-weight: 700;
+    color: #ddd;
+    letter-spacing: -0.5px;
+    line-height: 1.05;
+    margin-top: 18rem;
+    margin-bottom: 3.2rem;
+  }
+  
+  .hero-p {
+    font-size: 2.5rem;
+    color: #ccc;
+    line-height: 1.6;
+    margin-bottom: 4.8rem;
+  }
+  
+  .main-page {
+    background-image: url(images/photo_2023-07-15_09-34-04.jpg);
+    background-size: 100% 100%;
+    /* background-position: 100% 100%; */
+    height: 100vh;
+  }
+  
+  .nav-logo-text {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #ccc;
+  }
+  
+  
+  .update-heading {
+    font-size: 4rem;
+    font-weight: 700;
+    color: #999;
+    letter-spacing: -0.5px;
+    line-height: 1.05;
+    text-align: center;
+    margin-top: 9rem;
+  }
+  
+  .update-contain {
+    margin-top: 5rem;
+    background-image: url(images/photo_2023-07-15_08-36-27.jpg);
+    background-size: 100% 100%;
+    height: 100vh;
+  }
+  
+  .update-form-contain {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 470px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    padding-top: 2rem;
+  }
+  
+  .update-form-contain label {
+    font-size: 1.5rem;
+    color: #fff;
+  }
+  
+  .selection-part {
+    margin: 3rem 3rem;
+  }
+  
+  .secound-part {
+    margin: 3rem 1rem 0 3rem;
+
+  }
+  
+  .update-choosing input {
+    margin: 5rem 15rem 0;
+    padding: 1rem;
+    border-radius: 2rem;
+    /* align-items: center; */
+  }
+  .update-uploading button {
+    margin: 1rem 16rem;
+    padding: 1rem;
+    border-radius: 2rem;
+  }
+  .form-heading {
+    font-size: 3rem;
+    color: #aaa;
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+  
+  
