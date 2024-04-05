@@ -123,7 +123,6 @@
   }
   
   .update-contain {
-    margin-top: 5rem;
     background-image: url(images/photo_2023-07-15_08-36-27.jpg);
     background-size: 100% 100%;
     height: 100vh;
@@ -135,7 +134,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 400px;
-    height: 470px;
+    height: 410px;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 15px;
     padding-top: 2rem;
@@ -165,6 +164,9 @@
     margin: 1rem 16rem;
     padding: 1rem;
     border-radius: 2rem;
+  }
+  .update-uploading{
+    text-align: center;
   }
   .form-heading {
     font-size: 3rem;
