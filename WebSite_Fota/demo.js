@@ -1,14 +1,14 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDdXhbBrDCZwZ08M9oOJKfy_7_05-s9TbY",
-  authDomain: "update-f19b4.firebaseapp.com",
-  databaseURL: "https://update-f19b4-default-rtdb.firebaseio.com",
-  projectId: "update-f19b4",
-  storageBucket: "update-f19b4.appspot.com",
-  messagingSenderId: "1040245004423",
-  appId: "1:1040245004423:web:1b4d05f8332d82eedf0022",
-  measurementId: "G-ZC084MB0V9"
+  apiKey: "AIzaSyADCXJAtMSX0Fi8jtgz90yF-DepnijSogE",
+  authDomain: "full-fota.firebaseapp.com",
+  databaseURL: "https://full-fota-default-rtdb.firebaseio.com",
+  projectId: "full-fota",
+  storageBucket: "full-fota.appspot.com",
+  messagingSenderId: "442262673816",
+  appId: "1:442262673816:web:83fd86baf7d2998f4473ed",
+  measurementId: "G-3BB8NP6WHM"
 };
   
 // Initialize Firebase

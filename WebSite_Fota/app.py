@@ -9,9 +9,9 @@ app = Flask(__name__, template_folder='.')
 
 # Use credentials.Certificate with the path to the Firebase Admin SDK credentials file (fota-d43b8-firebase-adminsdk-os3z7-38c8441d6a.json)
 cred = credentials.Certificate(
-    "update-f19b4-firebase-adminsdk-58t4k-8c6a33cb78.json")
+    "full-fota-firebase-adminsdk-97lkk-d3c723d61a.json")
 firebase_admin.initialize_app(
-    cred, {'storageBucket': 'update-f19b4.appspot.com'})
+    cred, {'storageBucket': 'full-fota.appspot.com'})
 bucket = storage.bucket()
 
 print("Template Folder Path:", os.path.abspath(app.template_folder))
