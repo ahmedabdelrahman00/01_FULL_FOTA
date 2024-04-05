@@ -1,0 +1,7 @@
+../Drivers/CMSIS/Include/core_cm4.h:2064:26:ITM_SendChar	16	static,ignoring_inline_asm
+../Core/Src/main.c:68:6:toggleBankAndReset	32	static
+../Core/Src/main.c:101:5:_write	32	static
+../Core/Src/main.c:110:10:get_Active_Bank_no	16	static
+../Core/Src/main.c:121:5:main	8	static
+../Core/Src/main.c:183:6:SystemClock_Config	88	static
+../Core/Src/main.c:228:6:Error_Handler	4	static,ignoring_inline_asm

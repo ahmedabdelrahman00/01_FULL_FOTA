@@ -1,0 +1,7 @@
+../Drivers/CMSIS/Include/core_cm4.h:2064:26:ITM_SendChar	4
+../Core/Src/main.c:68:6:toggleBankAndReset	4
+../Core/Src/main.c:101:5:_write	2
+../Core/Src/main.c:110:10:get_Active_Bank_no	2
+../Core/Src/main.c:121:5:main	2
+../Core/Src/main.c:183:6:SystemClock_Config	3
+../Core/Src/main.c:228:6:Error_Handler	1
