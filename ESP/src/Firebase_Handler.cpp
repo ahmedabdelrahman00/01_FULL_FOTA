@@ -134,31 +134,29 @@ static void fcsDownloadCallback(FCS_DownloadStatusInfo info){
     }
 }
 
-int Version_Recieve(void){
-  if (Firebase.ready())
-  {
-    if (Firebase.RTDB.getInt(&fbdo, "/version"))
-    {
-      if (fbdo.dataType() == "int")
-      {
+int Version_Recieve(void) {
+  if (Firebase.ready()) {
+    if (Firebase.RTDB.getInt(&fbdo, "/updating-form/Version")) {
+      if (fbdo.dataType() == "int") {
         Version_int = fbdo.intData();
-        Serial.print("Function Version = ");
+        Serial.print("\nFunction Version = ");
         Serial.println(Version_int);
         return Version_int;
+      } else {
+        Serial.println("Error: Data type is not integer");
+        return 0;
       }
-      else
-        return 0;
-    }
-    else {
+    } else {
+      Serial.print("Error: ");
       Serial.println(fbdo.errorReason());
-        return 0;
+      return 0;
     }
-  }
-   else
-   {
+  } else {
+    Serial.println("Error: Firebase is not ready");
     return 0;
-   }
+  }
 }
+
 
 bool UpdateCheck(void){
   Global_AppServerVersion = Version_Recieve();

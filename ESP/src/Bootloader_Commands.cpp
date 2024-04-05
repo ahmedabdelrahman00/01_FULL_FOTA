@@ -128,6 +128,7 @@ void BL_UART_Send_Host_Command (uint8_t command_ID){
  * @param[in] memoryAddress The memory address for the write operation.
  * @return uint8_t Status indicating success (1) or failure (0).
  */
+
 uint8_t BL_UART_Send_Write_Command (uint32_t memoryAddress){
  char     Local_dummyBuf [2];
  uint16_t shiftingTimes = 0;
@@ -287,6 +288,7 @@ void BL_UART_Send_AppJump_Command (void){
  *
  * @return uint8_t Status indicating success (1) or failure (0).
  */
+
 uint8_t  BL_UART_Send_BootloaderJump_Command (void){
   char bte = 0x00;
   /* Inform STM32 to Start Fetching the Packet */
@@ -382,4 +384,31 @@ void displayProgressBar(uint32_t bytesRead, uint32_t fileSize) {
     for (int i = 0; i < PROGRESS_BAR_WIDTH + 15; ++i) {
         Serial.print("\b");
     }
+}
+
+
+
+
+
+
+uint8_t determineBootMode() {
+    char response = 0x00;
+    
+    Serial.println("Requesting mode state...");
+    SerialPort.write(0x66); // Command byte to STM
+    
+    long startMillis = millis();
+    while (!SerialPort.available()) {
+        if (millis() - startMillis > 5000) { // Timeout of 5 seconds
+            Serial.println("Timeout waiting for response");
+            return 0xFF; // Indicate timeout
+        }
+    }
+    
+    response = SerialPort.read();
+    
+    Serial.print("Response received: ");
+    Serial.println(response, HEX);
+    
+    return response;
 }

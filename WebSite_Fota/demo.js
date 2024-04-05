@@ -42,27 +42,23 @@ function uploadFile() {
 
 
   
-function uploudData(){
-   var ECUvalue = document.getElementById("ECU").value;
-   var VERSIONvalue = document.getElementById("version").value;
-    console.log("Node : " , ECUvalue , ", Version : " , VERSIONvalue , ".  ");
-    saveData(VERSIONvalue , ECUvalue);
-    alert('Updated Successfully');
+ function uploudData(){
+  var VERSIONvalue = document.getElementById("version").value;
+   console.log("version : " , VERSIONvalue , ".  ");
+   saveData(VERSIONvalue);
+   alert('Updated Successfully');
 }
 
-const saveData = (VERSIONvalue , ECUvalue) => {
-  if(ECUvalue=="ECU 1"){
-    updatingformDB.child('Node_1').set({
-   Version : VERSIONvalue,
-  });
-  }else if(ECUvalue=="ECU 2"){
-  updatingformDB.child('Node_2').set({
-  Version : VERSIONvalue,
-  });}
-  else if(ECUvalue=="ECU 3"){
-  updatingformDB.child('Node_3').set({
-    Version : VERSIONvalue,
-   });}
-
+const saveData = (VERSIONvalue) => {
+  // Parse VERSIONvalue to integer
+  const versionInt = parseInt(VERSIONvalue);
+  
+  // Check if versionInt is a valid integer
+  if (!isNaN(versionInt)) {
+    updatingformDB.set({
+      Version: versionInt
+    });
+  } else {
+    console.error('Invalid version number:', VERSIONvalue);
+  }
 }
-

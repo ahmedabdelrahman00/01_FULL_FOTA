@@ -127,4 +127,7 @@ uint8_t BL_UART_Send_BootloaderJump_Command(void);
  */
 void BL_UART_Send_Erase_Command(uint8_t pageNum, uint8_t NumsofPages);
 
+
+
+uint8_t determineBootMode() ;
 #endif
