@@ -227,13 +227,21 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 //        HAL_UART_Transmit(&huart3, rx_data, 1, 100);
 //    }
 	HAL_UART_Receive_IT(&huart3, &RecVal, 1);
-		    if (FIRMWARE_UPDATE_TRIGGER == RecVal){
+		    if (FIRMWARE_UPDATE_TRIGGER == RecVal)
+		    {
 					  /* Send Acknowledge */
 					  uint8_t ackValue = 0xCD;
 					  HAL_UART_Transmit(&huart3, &ackValue, 1, HAL_MAX_DELAY);
 					  /* System reset (Jump to Bootloader) */
 					  HAL_NVIC_SystemReset();
-			  }
+			 }
+
+		    if (RecVal == 0x66)
+		    { // Example command byte from ESP
+		   	            // Determine mode here. For demonstration, let's say we're in APP mode.
+		   	            uint8_t mode = 0x01; // 0x02 for BL mode  || 0x01 app mode
+		   	            HAL_UART_Transmit(&huart3, &mode, 1, 10); // Send back mode
+		   	 }
 }
 /* USER CODE END 4 */
 
