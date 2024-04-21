@@ -1,0 +1,9 @@
+../Core/Src/freertos.c:78:13:vApplicationIdleHook	2
+../Core/Src/freertos.c:99:13:PreSleepProcessing	1
+../Core/Src/freertos.c:104:13:PostSleepProcessing	1
+../Core/Src/freertos.c:114:6:vApplicationGetIdleTaskMemory	1
+../Core/Src/freertos.c:128:6:MX_FREERTOS_Init	1
+../Core/Src/freertos.c:179:6:StartDefaultTask	2
+../Core/Src/freertos.c:200:6:Task2_init	1
+../Core/Src/freertos.c:218:6:Task3_init	1
+../Core/Src/freertos.c:233:6:HAL_UART_RxCpltCallback	4
