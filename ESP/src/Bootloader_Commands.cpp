@@ -10,6 +10,7 @@
 #include "Bootloader_Commands.h"
 #include <SoftwareSerial.h>
 SoftwareSerial SerialPort(4,5);
+SoftwareSerial  a(D6,D5);
 
 
 void displayProgressBar(uint32_t bytesRead, uint32_t fileSize); 
@@ -22,7 +23,9 @@ uint32_t CRC32_Value;
 
 /* API Definitions -----------------------------------------------------------*/
  void UART2_Init (void){
+     a.begin (9600);
    SerialPort.begin(9600);
+  //  a.begin(9600);
  }
 
 /**
@@ -179,42 +182,25 @@ uint8_t BL_UART_Send_Write_Command (uint32_t memoryAddress){
           BL_Host_Buffer[(8 + PAYLOAD_LENGTH)]  = Word_Value_To_Byte_Value(CRC32_Value, 2);
           BL_Host_Buffer[(9 + PAYLOAD_LENGTH)]  = Word_Value_To_Byte_Value(CRC32_Value, 3);
           BL_Host_Buffer[(10 + PAYLOAD_LENGTH)] = Word_Value_To_Byte_Value(CRC32_Value, 4);
-          /* Display whole packet 
-          for (uint8_t i = 0; i < CBL_MEM_WRITE_CMD_Len; i++){
-               Serial.print(BL_Host_Buffer[i], HEX);
-               Serial.print(' ');
-          }
-          */
-          //Serial.print("\n\n");
-          /* Inform STM32 to Start Fetching the Packet */
-          //Serial.println("Starting Process...");
+         
           SerialPort.write(BOOTLOADER_START_KEY);
-          /* Send the Packet */
-          //Serial.print(BL_Host_Buffer[0]);
-          //Serial.print(' ');
+        
           SerialPort.write(BL_Host_Buffer[0]);
           for (uint16_t i = 1; i < CBL_MEM_WRITE_CMD_Len; ++i){
                 //Serial.print(BL_Host_Buffer[i], HEX);
                 //Serial.print(' ');
                 SerialPort.write(BL_Host_Buffer[i]);
            }
-           //Serial.println();
+         
            /* Read the Command Response */
            while(!SerialPort.available());
            SerialPort.readBytes(BL_Buffer, 2);
-           //Serial.println(BL_Buffer[0], HEX);
-           //Serial.print(BL_Buffer[1], HEX);
+          
            if (BL_Buffer[0] == ACK){
-                /* Hence, The Packet transfering successed */
-                //Serial.println("\nReceived Acknowledge");
+            
                 uint8_t packet_received_length = BL_Buffer[1];
                 SerialPort.readBytes(BL_Buffer, packet_received_length);
-                /*
-                for (int i = 0; i < packet_received_length; ++i){
-                      Serial.print(BL_Buffer[i], DEC);
-                      Serial.print(' ');
-                }
-                */
+           
                 shiftingTimes++;
                 //Serial.println("Flushing Host Buffer...");
                 memset(BL_Host_Buffer, 0, sizeof(BL_Host_Buffer)); 
@@ -390,25 +376,51 @@ void displayProgressBar(uint32_t bytesRead, uint32_t fileSize) {
 
 
 
-
-uint8_t determineBootMode() {
-    char response = 0x00;
-    
-    Serial.println("Requesting mode state...");
-    SerialPort.write(0x66); // Command byte to STM
-    
-    long startMillis = millis();
-    while (!SerialPort.available()) {
-        if (millis() - startMillis > 5000) { // Timeout of 5 seconds
-            Serial.println("Timeout waiting for response");
-            return 0xFF; // Indicate timeout
-        }
-    }
-    
-    response = SerialPort.read();
-    
-    Serial.print("Response received: ");
-    Serial.println(response, HEX);
-    
-    return response;
+uint8_t receiveResponse() {
+  while (!a.available()) {
+    // Wait until data is available
+    delay(10);
+  }
+  return a.read(); // Read the incoming byte
 }
+
+
+uint8_t get_Active_Bank_no() {
+ 
+
+  a.write(0x66);
+  a.flush(); 
+
+  uint8_t receivedByte = receiveResponse();
+  // Print the response
+  Serial.print("Received Bank Number: ");
+  return receivedByte;
+  // Add a delay to avoid spamming, adjust as necessary
+  //delay(2000);
+}
+
+
+
+
+
+
+void Display_choose_swaping() {
+    
+    Serial.println("notofiy user the update is install ...");
+    a.write(0x8C); // Command byte to STM
+}
+
+
+
+uint8_t CheckValidityMarker() {
+   
+   a.write(0x4C);
+   a.flush(); 
+
+  uint8_t receivedByte = receiveResponse();
+  // Print the response
+  Serial.print("Received validity marker: ");
+  return receivedByte;
+
+
+    }

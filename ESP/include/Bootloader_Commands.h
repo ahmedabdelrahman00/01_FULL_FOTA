@@ -26,7 +26,7 @@
 
 #define PAYLOAD_LENGTH                       64
 #define BL_Host_Buffer_LENGTH                400
-#define APP1_BASE_ADDRESS                    0x08008000
+#define APP1_BASE_ADDRESS                    0x08100000
 
 #define CBL_GET_VER_CMD_LEN                  6   
 #define CBL_GET_HELP_CMD_LEN                 6   
@@ -129,5 +129,8 @@ void BL_UART_Send_Erase_Command(uint8_t pageNum, uint8_t NumsofPages);
 
 
 
-uint8_t determineBootMode() ;
+uint8_t  get_Active_Bank_no() ;
+void Display_choose_swaping();
+uint8_t CheckValidityMarker() ;
+uint8_t receiveResponse() ;
 #endif
